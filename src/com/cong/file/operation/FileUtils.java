@@ -4,10 +4,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JOptionPane;
 
 
 /**
@@ -90,6 +93,45 @@ public class FileUtils {
  	  }
     }
    
+    /**
+     * 导出文件路径
+     *  @author zyongcong 2016-11-29
+     * @param list  文件径列表
+     * @param filePath  文件路径 
+     * @param append  是否在当前文件中追加
+     */
+    public void write2File(List<String> list,String filePath,boolean append){
+    	if(list ==null ) {
+    		JOptionPane.showMessageDialog(null, "没有要输出的内容");
+    		return ;
+    	}
+    	if(filePath == null ) {
+    		JOptionPane.showMessageDialog(null, "请输入文件路径");
+    		return;
+    	}
+    	FileOutputStream fos = null;
+    	File file = null;
+		 try{
+			 file = new File(filePath);	
+			 if(!file.isFile()){
+				 JOptionPane.showMessageDialog(null, "输入的不是一个文件路径");
+				 return;
+			 }else if(!file.exists()){
+				 file.createNewFile();
+			 }
+			 fos = new FileOutputStream(file,append);		 
+			 for(int i = 0 ; i < list.size(); i++){
+			   String pathStr = list.get(i);
+			   fos.write(pathStr.getBytes());
+			   fos.write("\r\n".getBytes());
+			 }
+		 }catch(FileNotFoundException notFound){
+			notFound.printStackTrace();
+		 }catch( IOException io){
+		    io.printStackTrace();
+		 }
+    	
+    }
 //*************************把搜索到的文件 写到文件中*******************************************   
     public void readFile(String searchPath,String filePath) throws Exception{
  	   //读取文件 获取文件名
@@ -187,12 +229,12 @@ public class FileUtils {
 	   if(isBlank(name))
 		   return false;
 	   List<String> endList = new ArrayList();
-	   endList.add("js");
-	   endList.add("xml");
-	   endList.add("css");
-	   endList.add("jsp");
-	   endList.add("gif");
-	   endList.add("png");
+	   endList.add(".js");
+	   endList.add(".xml");
+	   endList.add(".css");
+	   endList.add(".jsp");
+	   endList.add(".gif");
+	   endList.add(".png");
       if(endList.contains(name))
     	  return true;
       return false;

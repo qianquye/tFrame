@@ -14,6 +14,7 @@ import java.awt.Component;
 
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
+import javax.swing.JCheckBox;
 
 import com.cong.frame.listener.SearchFileActionListener;
 import com.cong.mainFrame.MainFrame;
@@ -22,12 +23,17 @@ import javax.swing.JComboBox;
 
 public class SearchPanelContainer extends BasicContainer {
  
-  private JTextField inputField;
-  private JButton searchButton;
-  private JButton selectButton;
-  private Container container;
+  private JTextField inputField; //搜索内容文本
+  private JButton searchButton; //搜索按钮
+  private JButton selectButton; //路径选择按钮
+  private Container container;//
+  
+  private JTextField fileInpuptField;//内容存储文件路径
+  private JButton selectfileButton; //路径选择按钮
+  private JCheckBox checkBox; //是否追加：指文件是新建还是在原来地方
+  private JButton exportButton ; //导出文件按钮
 
-  private JComboBox<String> comboBox;  
+  private JComboBox<String> comboBox; //文件路径的下拉列表框 
   
   
   public SearchPanelContainer(Container container){
@@ -83,7 +89,7 @@ public class SearchPanelContainer extends BasicContainer {
       searchButton.setActionCommand("ss");//single-search      
       basic.add(searchButton);
       
-      
+      //文件输出域
       label = new JLabel("文件输出");
       label.setBounds(20, 120, width, 30);
       basic.add(label);      
@@ -91,10 +97,41 @@ public class SearchPanelContainer extends BasicContainer {
       scrollPane.setBounds(20, 150, width-50, height-150);
       basic.add(scrollPane);
       
-      //TODO 为选择按钮添加监听 selecteButton
+      //将内容输出的文件路径
+      label = new JLabel("文件输出：");
+      label.setBounds(20, height+10, 80, 30);
+      basic.add(label);  
+      fileInpuptField = new JTextField();
+      fileInpuptField.setBounds(80, height+10, width-320, 30);
+      basic.add(fileInpuptField);
+      //选择按钮
+      selectfileButton = new JButton("选择路径");
+      selectfileButton.setBounds(width-230, height+10, 80, 30);
+	  //动作命令
+      selectfileButton.setActionCommand("sfbutton"); //search-file-button
+      basic.add(selectfileButton);
+      //添加复选框
+      checkBox = new JCheckBox();
+      checkBox.setBounds(width-130, height+10, 30, 30);
+      basic.add(checkBox);
+      label = new JLabel("是否追加");
+      label.setBounds(width-100,height+10,80, 30);
+      basic.add(label); 
+      
+      //导出文件按钮
+      exportButton = new JButton("导出");
+      exportButton.setBounds(width-100, height+50, 80, 30);
+      exportButton.setActionCommand("exportbutton");
+      basic.add(exportButton);
+      
+      //为选择按钮添加监听 
       selectButton.addActionListener(new SearchFileActionListener(comboBox));
       //添加监听
       searchButton.addActionListener(new SearchFileActionListener(inputField,comboBox,textArea));
+      //将内容输出的文件路径添加监听
+      selectfileButton.addActionListener(new SearchFileActionListener(fileInpuptField));
+     // 导出按钮监听
+      exportButton.addActionListener(new SearchFileActionListener(fileInpuptField,checkBox));
       
       return basic;
   }
