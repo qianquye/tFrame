@@ -1,6 +1,9 @@
 package com.cong.fream.container;
 
 import java.awt.Container;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -8,6 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+
+import org.apache.log4j.chainsaw.Main;
 
 import com.cong.frame.listener.CopyFileActionListener;
 
@@ -21,13 +26,17 @@ public class CopyPanelContainer extends BasicContainer{
 	private JButton selectIButton;//输入的文件按钮
 	private JTextField textField;
 	
+	public Map<String,String> param;
     
+	public CopyPanelContainer(){}
+	
 	public CopyPanelContainer(Container container){
 		this.container = container;
 		//container.remove(0);
 		container.repaint();
 		container.revalidate();//重新绘画
 	}
+	
 	
 	public void creator(){
 		container.add(createCopy());
@@ -142,10 +151,41 @@ public class CopyPanelContainer extends BasicContainer{
 	  packButton.addActionListener(copyFileListener);
 	  checkSuccMessage.addActionListener(copyFileListener);
 	  checkFailMessage.addActionListener(copyFileListener);
-	  
-	  
+	  readVale();
 	  return basic;
 	}
+
+	
+	private void readVale(){
+		if(param == null)
+			return ;
+        String path  = param.get("path");
+        String patch = param.get("patch");
+        String targetPath = param.get("targetPath");
+        comboBoxP.setSelectedItem(path);
+        comboBoxB.setSelectedItem(patch);
+        comboBoxF.setSelectedItem(targetPath);
+        textField.setText(curTimeFormat());
+	}
+
+	
+	public String curTimeFormat(){
+		Date date = new Date();
+		SimpleDateFormat form=new SimpleDateFormat("yyyyMMddHHmm");
+		String dateStr = form.format(date);
+		return dateStr;
+	}
+
+	
+	public Map<String, String> getParam() {
+		return param;
+	}
+
+	public void setParam(Map<String, String> param) {
+		this.param = param;
+	}
+	
+	
 	
 	
 }

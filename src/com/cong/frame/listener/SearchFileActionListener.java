@@ -15,6 +15,7 @@ import javax.swing.JCheckBox;
 import com.cong.file.operation.FileUtils;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.io.File;
 
 public class SearchFileActionListener implements ActionListener {
@@ -22,12 +23,12 @@ public class SearchFileActionListener implements ActionListener {
 	private String  name;//搜索的名字
 	private JTextArea output; //输出的地方
 	private JTextField inputField;//文本输入框
-	private JComboBox comboBox; //文本下拉框
+	private JComboBox<String> comboBox; //文本下拉框
 	private FileUtils fu ;
-	private String isOk;
+//	private String isOk;
 	private JCheckBox checkBox ; //复选框 
 	
-	public static List<String> listPath = null;
+//	public List<String> listPath = searchFileFocusListener.listPath;
 	
 	
 	public SearchFileActionListener(){}
@@ -35,13 +36,13 @@ public class SearchFileActionListener implements ActionListener {
 		this.name = name;
 	}
 	
-	public SearchFileActionListener(JComboBox comboBox){
+	public SearchFileActionListener(JComboBox<String> comboBox){
 		this.comboBox = comboBox;
 	}
 	
 	public SearchFileActionListener(JTextField inputField){
 		this.inputField = inputField;
-	
+	   //	fu = new FileUtils();
 	} 
 	public SearchFileActionListener(JTextField inputField,JCheckBox checkBox){
 		this.inputField = inputField;
@@ -49,16 +50,16 @@ public class SearchFileActionListener implements ActionListener {
 		fu = new FileUtils();
 	}
 	
-	public SearchFileActionListener(JTextField inputField,JComboBox comboBox,JTextArea container){
+	public SearchFileActionListener(JTextField inputField,JComboBox<String> comboBox,JTextArea container){
 		this.inputField = inputField;
 		this.comboBox = comboBox;
 		this.output = container;
-		 fu = new FileUtils();
+		// fu = new FileUtils();
 	}
 	
 	public void actionPerformed(ActionEvent evt){
 		String command = evt.getActionCommand();
-		
+		List<String>  listPath = searchFileFocusListener.listPath;
 		if("ss".equals(command)){//搜索按钮动作操作
 			String value  = inputField.getText();
 			String path = (String)comboBox.getSelectedItem();			
@@ -76,6 +77,36 @@ public class SearchFileActionListener implements ActionListener {
 				}
 			}	
 			output.append("\n"+"文件名为:["+value+"]\n查询路径:["+path+"]\n搜索完毕,共搜索到("+listPath.size()+")个文件");
+		}else if("ss2".equals(command)){//从结果集中第二次搜索
+			String value2  = inputField.getText();
+			if(value2 == null){
+				JOptionPane.showMessageDialog(null, "请输入搜索名称");
+				return;
+			}
+			value2 = value2.replace("/", "\\");
+			if(listPath == null){
+				JOptionPane.showMessageDialog(null, "没有结果集！");
+				return;
+			}
+			List<String> nameList = new ArrayList<String>();
+			nameList.add(value2);
+			List<String> temp = fu.searchbyCollect(nameList, listPath);
+			if(temp != null){
+				listPath.clear();
+				listPath = temp;
+			}
+			//这个方法可以抽出来
+			output.setText("");
+			//调用查询文件接口
+			System.out.println(listPath.size());
+			if(listPath != null && listPath.size() > 0 ){
+				for(int i = 0; i<listPath.size(); i++){
+					output.append(listPath.get(i)+"\n");
+				}
+			}	
+			output.append("\n"+"文件名为:["+value2+"]\n搜索完毕,共搜索到("+listPath.size()+")个文件");
+
+			
 		}else if("ssbutton".equals(command)){//选择搜索路径操作
 			String path = (String)comboBox.getSelectedItem();
 			File file = this.getFileChooser(path);

@@ -11,7 +11,7 @@ import com.cong.frame.main.MainFrame;
 import com.cong.fream.container.CopyPanelContainer;
 import com.cong.fream.container.SearchPanelContainer;
 
-public class MenuViewActionListener implements ActionListener{
+public class MenuViewActionListener extends BasicActionListener{
 	private Container container ; 
 	
 	public MenuViewActionListener(Container container){
@@ -38,12 +38,5 @@ public class MenuViewActionListener implements ActionListener{
 		}
 	}
 	
-	private void clear(Container param){
-		Component[]  c = param.getComponents();
-		if(c != null && c.length > 1){
-			for(int i = 1 ; i<c.length;i++){
-				param.remove(c[i]);
-			}
-		}
-	}
+	
 }

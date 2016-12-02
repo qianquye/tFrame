@@ -24,16 +24,20 @@ public class FileUtils {
    
    public static void main(String[] arge)throws Exception {
 	   FileUtils fu = new FileUtils();
-	   List<String> list = new ArrayList<String>();
-	   list.add("RadionboxRenderImpl");
-//	   fu.getFilePath("E:\\sotfwear\\MyEclipse8.5_GOV\\ZHWBPH\\.metadata\\.me_tcat\\webapps",list);
-
-//		fu.getFilePath("E:\\sotfwear\\MyEclipse8.5_GOV\\ZHWB\\.metadata\\.me_tcat\\webapps",list);
-//     fu.getFilePath("E:\\sotfwear\\MyEclipse8.5_GOV\\ZHWBYY\\.metadata\\.me_tcat\\webapps",list);
-//     fu.getFilePath("E:\\Primeton\\Platform\\apache-tomcat-5.5.20\\webapps",list);
-	  	fu.getFilePath("E:\\sotfwear\\MyEclipse8.5_GOV\\ZHWBSB\\.metadata\\.me_tcat\\webapps",list);
-		System.out.println(fu.pathList);
-	 //  fu.readFile("E:\\sotfwear\\MyEclipse8.5_GOV\\ZHWB\\.metadata\\.me_tcat\\webapps", "E:\\data\\升版文件\\0510\\事项预览-样例预览.txt");
+//	   List<String> list = new ArrayList<String>();
+//	   list.add("RadionboxRenderImpl");
+//	  	fu.getFilePath("E:\\sotfwear\\MyEclipse8.5_GOV\\ZHWBSB\\.metadata\\.me_tcat\\webapps",list);
+//		System.out.println(fu.pathList);
+	   //test searchbyCollect
+	   List<String> nameList = new ArrayList<String>();
+	   List<String> dataList = new ArrayList<String>();
+	   nameList.add("file\\ZoomImageScale");
+	   nameList.add("impl\\PreviewUploadFileRenderImpl");
+       dataList.add("appPortal\\WEB-INF\\classes\\com\\eshore\\gov\\zhwb\\wbsb\\file\\ZoomImageScale.class");	   
+       dataList.add("wbsbMgr\\WEB-INF\\classes\\com\\eshore\\gov\\zhwb\\wbsb\\file\\ZoomImageScale.class");	   
+       dataList.add("ws\\WEB-INF\\classes\\com\\eshore\\gov\\wbsb\\ws\\action\\WbsbFileOperaAction.class");
+       System.out.println(fu.searchbyCollect(nameList, dataList));
+       
 	}
 	
    public FileUtils(){ }
@@ -92,7 +96,74 @@ public class FileUtils {
  		   }
  	  }
     }
+    
+    /**
+     * 读取文件清单中的文件
+     * @param filepath
+     */
+   public void readFileList(String filepath){
+	   
+	   if(filepath == null){
+		   return;
+	   }
+	   File file = new File(filepath);
+	   FileInputStream  fis = null;
+	   BufferedReader br = null;
+	   List<String> firstNameList = new ArrayList<String>();
+	   List<String> secondNameList = new ArrayList<String>();
+	   List<String> folderList = new ArrayList<String>();
+	   try{
+		   fis = new FileInputStream(file);
+		   br = new BufferedReader(new InputStreamReader(fis));
+		   String line = null;
+		   while((line=br.readLine()) !=null){
+			   line = line.replaceAll(" ", "").replaceAll("/","\\");
+			   File tempfile = new File(line);
+			   if(tempfile.isDirectory()){//判断是不是文件夹
+				   folderList.add(line);
+			   }else{
+				   String firstStr = line.substring(line.lastIndexOf("\\")+1, line.lastIndexOf("."));
+				   String secondStr = line.substring(line.lastIndexOf(line.lastIndexOf("\\"),line.lastIndexOf("\\")-1), line.lastIndexOf("."));
+				   firstNameList.add(firstStr);
+				   secondNameList.add(secondStr);
+			   }
+			   //取文件名
+			    
+			   //取倒数第二个文件夹名与文件名
+			   
+		   }
+	   }catch(FileNotFoundException notfound){
+		  notfound.printStackTrace();
+	   }catch(IOException io){
+		   io.printStackTrace();
+	   }
+   }
    
+    /**
+     * 从集合中搜索结果
+     * @param nameList 搜索名集合
+     * @param dataList 数据集合
+     * @return
+     */
+    public List<String> searchbyCollect(List<String> nameList,List<String> dataList){
+    	List<String> result = new ArrayList<String>();
+    	if(nameList == null){
+    		return null;
+    	}
+    	if(dataList == null || dataList.size()<=0){
+    		return null;
+    	}
+    	for(int i =0 ; i<nameList.size(); i++){
+    		String nameStr = nameList.get(i);
+    		for(int j = 0 ;j<dataList.size();j++){
+    			if(dataList.get(j).contains(nameStr)){
+    				result.add(dataList.get(j));
+    			}
+    		}
+    	}
+    	return result;
+    }
+    
     /**
      * 导出文件路径
      *  @author zyongcong 2016-11-29
@@ -113,22 +184,32 @@ public class FileUtils {
     	File file = null;
 		 try{
 			 file = new File(filePath);	
+			 if(!file.exists()){
+				 file.createNewFile();
+			 }
 			 if(!file.isFile()){
 				 JOptionPane.showMessageDialog(null, "输入的不是一个文件路径");
 				 return;
-			 }else if(!file.exists()){
-				 file.createNewFile();
 			 }
 			 fos = new FileOutputStream(file,append);		 
 			 for(int i = 0 ; i < list.size(); i++){
 			   String pathStr = list.get(i);
 			   fos.write(pathStr.getBytes());
-			   fos.write("\r\n".getBytes());
+			   fos.write("\r\n\r\n".getBytes());
 			 }
+			 JOptionPane.showMessageDialog(null, "导出成功"+list.size()+"个文件");
 		 }catch(FileNotFoundException notFound){
 			notFound.printStackTrace();
 		 }catch( IOException io){
 		    io.printStackTrace();
+		 }finally{
+			 if(fos != null){
+				 try {
+					fos.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			 }
 		 }
     	
     }
