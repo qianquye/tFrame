@@ -24,16 +24,20 @@ public class FileUtils {
    
    public static void main(String[] arge)throws Exception {
 	   FileUtils fu = new FileUtils();
-	   List<String> list = new ArrayList<String>();
-	   list.add("RadionboxRenderImpl");
-//	   fu.getFilePath("E:\\sotfwear\\MyEclipse8.5_GOV\\ZHWBPH\\.metadata\\.me_tcat\\webapps",list);
-
-//		fu.getFilePath("E:\\sotfwear\\MyEclipse8.5_GOV\\ZHWB\\.metadata\\.me_tcat\\webapps",list);
-//     fu.getFilePath("E:\\sotfwear\\MyEclipse8.5_GOV\\ZHWBYY\\.metadata\\.me_tcat\\webapps",list);
-//     fu.getFilePath("E:\\Primeton\\Platform\\apache-tomcat-5.5.20\\webapps",list);
-	  	fu.getFilePath("E:\\sotfwear\\MyEclipse8.5_GOV\\ZHWBSB\\.metadata\\.me_tcat\\webapps",list);
-		System.out.println(fu.pathList);
-	 //  fu.readFile("E:\\sotfwear\\MyEclipse8.5_GOV\\ZHWB\\.metadata\\.me_tcat\\webapps", "E:\\data\\升版文件\\0510\\事项预览-样例预览.txt");
+//	   List<String> list = new ArrayList<String>();
+//	   list.add("RadionboxRenderImpl");
+//	  	fu.getFilePath("E:\\sotfwear\\MyEclipse8.5_GOV\\ZHWBSB\\.metadata\\.me_tcat\\webapps",list);
+//		System.out.println(fu.pathList);
+	   //test searchbyCollect
+	   List<String> nameList = new ArrayList<String>();
+	   List<String> dataList = new ArrayList<String>();
+	   nameList.add("file\\ZoomImageScale");
+	   nameList.add("impl\\PreviewUploadFileRenderImpl");
+       dataList.add("appPortal\\WEB-INF\\classes\\com\\eshore\\gov\\zhwb\\wbsb\\file\\ZoomImageScale.class");	   
+       dataList.add("wbsbMgr\\WEB-INF\\classes\\com\\eshore\\gov\\zhwb\\wbsb\\file\\ZoomImageScale.class");	   
+       dataList.add("ws\\WEB-INF\\classes\\com\\eshore\\gov\\wbsb\\ws\\action\\WbsbFileOperaAction.class");
+       System.out.println(fu.searchbyCollect(nameList, dataList));
+       
 	}
 	
    public FileUtils(){ }
@@ -93,6 +97,31 @@ public class FileUtils {
  	  }
     }
    
+    /**
+     * 从集合中搜索结果
+     * @param nameList 搜索名集合
+     * @param dataList 数据集合
+     * @return
+     */
+    public List<String> searchbyCollect(List<String> nameList,List<String> dataList){
+    	List<String> result = new ArrayList<String>();
+    	if(nameList == null){
+    		return null;
+    	}
+    	if(dataList == null || dataList.size()<=0){
+    		return null;
+    	}
+    	for(int i =0 ; i<nameList.size(); i++){
+    		String nameStr = nameList.get(i);
+    		for(int j = 0 ;j<dataList.size();j++){
+    			if(dataList.get(j).contains(nameStr)){
+    				result.add(dataList.get(j));
+    			}
+    		}
+    	}
+    	return result;
+    }
+    
     /**
      * 导出文件路径
      *  @author zyongcong 2016-11-29

@@ -27,6 +27,9 @@ public class SearchPanelContainer extends BasicContainer {
   private JButton searchButton; //搜索按钮
   private JButton selectButton; //路径选择按钮
   private Container container;//
+  //二次搜索文本框与按钮
+  private JTextField search2inputField;
+  private JButton search2Button;
   
   private JTextField fileInpuptField;//内容存储文件路径
   private JButton selectfileButton; //路径选择按钮
@@ -91,8 +94,16 @@ public class SearchPanelContainer extends BasicContainer {
       
       //文件输出域
       label = new JLabel("文件输出");
-      label.setBounds(20, 120, width, 30);
+      label.setBounds(20, 120, 80, 30);
       basic.add(label);      
+      search2inputField = new JTextField();
+      search2inputField.setBounds(200,120,350,25);
+      basic.add(search2inputField);  
+      search2Button = new JButton("搜索");
+      search2Button.setBounds(560, 120, 80, 25);
+      search2Button.setActionCommand("ss2");
+      basic.add(search2Button);
+      
       JScrollPane scrollPane =  (JScrollPane)makeTextPanel(null);
       scrollPane.setBounds(20, 150, width-50, height-150);
       basic.add(scrollPane);
@@ -132,7 +143,8 @@ public class SearchPanelContainer extends BasicContainer {
       selectfileButton.addActionListener(new SearchFileActionListener(fileInpuptField));
      // 导出按钮监听
       exportButton.addActionListener(new SearchFileActionListener(fileInpuptField,checkBox));
-      
+     //二次搜索监听
+      search2Button.addActionListener(new SearchFileActionListener(search2inputField,null,textArea));
       return basic;
   }
   
