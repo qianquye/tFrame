@@ -42,7 +42,7 @@ public class SearchFileActionListener implements ActionListener {
 	
 	public SearchFileActionListener(JTextField inputField){
 		this.inputField = inputField;
-	   //	fu = new FileUtils();
+		fu = new FileUtils();
 	} 
 	public SearchFileActionListener(JTextField inputField,JCheckBox checkBox){
 		this.inputField = inputField;

@@ -91,8 +91,10 @@ public class SearchPanelContainer extends BasicContainer {
       label.setBounds(20, 120, 80, 30);
       basic.add(label);      
       search2inputField = new JTextField();
+
       search2inputField.setBounds(200,120,width-310,25);
       basic.add(search2inputField); 
+
       
       JScrollPane scrollPane =  (JScrollPane)makeTextPanel(null);
       scrollPane.setBounds(20, 150, width-50, height-150);
@@ -137,8 +139,10 @@ public class SearchPanelContainer extends BasicContainer {
       selectfileButton.addActionListener(new SearchFileActionListener(fileInpuptField));
      // 导出按钮监听
       exportButton.addActionListener(new SearchFileActionListener(fileInpuptField,checkBox));
+
      //打包按钮监听
       packageButton.addActionListener(new GotoActionListener(container,comboBox,fileInpuptField));
+
       return basic;
   }
   
