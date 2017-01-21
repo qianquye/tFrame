@@ -98,6 +98,11 @@ public class CopyPanelContainer extends BasicContainer{
 	  selectIButton.setBounds(width-140,90,80,30);
 	  selectIButton.setActionCommand("sibutton");
 	  basic.add(selectIButton);
+	  //创建预览文件按钮
+	  JButton previewButton = new JButton("预览");
+	  previewButton.setBounds(width-60, 90, 60, 30);
+	  previewButton.setActionCommand("preview");
+	  basic.add(previewButton);
 	  
 	//提示
 	  label = new JLabel("版本号:");
@@ -151,6 +156,7 @@ public class CopyPanelContainer extends BasicContainer{
 	  packButton.addActionListener(copyFileListener);
 	  checkSuccMessage.addActionListener(copyFileListener);
 	  checkFailMessage.addActionListener(copyFileListener);
+	  previewButton.addActionListener(copyFileListener);
 	  readVale();
 	  return basic;
 	}

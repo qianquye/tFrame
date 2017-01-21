@@ -169,6 +169,7 @@ public class Patch {
 							&& !fileList.contains(line)){
 						fileList.add(line);
 						fos.write(line.getBytes());
+						fos.write("\r\n".getBytes());
 					}
 				}
 			}

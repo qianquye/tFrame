@@ -2,18 +2,25 @@ package com.cong.frame.listener;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField; 
 
+import java.awt.BorderLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 
 import com.cong.common.utils.Utils;
 import com.cong.file.operation.Patch;
+import com.cong.frame.main.MainFrame;
 
 import java.util.Collections;
 import java.util.List;
@@ -124,6 +131,27 @@ public class CopyFileActionListener implements ActionListener {
 				}
 			}
 			comboBoxB.setSelectedItem(filePath);
+		}else if("preview".equals(command)){//预览txt文件 技术水平有限，这里处理不太好
+			String patchFile = (String)comboBoxB.getSelectedItem();
+			try {
+				if(Utils.isBank(patchFile)){
+					JOptionPane.showMessageDialog(null,"请输入补丁路径");
+				}else{
+		          String filename[] = patchFile.split(",");
+		          URL url = (new File(filename[0])).toURI().toURL();		          
+		          JEditorPane editorPane = new JEditorPane(url);
+		          editorPane.setEditable(false);
+		          int width = 800;
+		          int height= 500;         
+		          JFrame frame = new JFrame();
+		          frame.getContentPane().add(editorPane, BorderLayout.CENTER);
+		          frame.setSize(width, height);
+		          frame.setLocation(new Point(MainFrame.screenWidth/5,MainFrame.screenHeight/13));
+		          frame.setVisible(true);
+				}
+		      } catch (IOException e) {
+		        e.printStackTrace();
+		      }
 		}
 		
 		

@@ -21,15 +21,17 @@ import javax.swing.JOptionPane;
 public class FileUtils {
 	
    private List<String> pathList ;
+   private String proPath ;
    
    public static void main(String[] arge)throws Exception {
 	   FileUtils fu = new FileUtils();
-//	   List<String> list = new ArrayList<String>();
-//	   list.add("RadionboxRenderImpl");
-//	  	fu.getFilePath("E:\\sotfwear\\MyEclipse8.5_GOV\\ZHWBSB\\.metadata\\.me_tcat\\webapps",list);
-//		System.out.println(fu.pathList);
+	  // List<String> list = new ArrayList<String>();
+	  //-- fu.init("RadionboxRenderImpl", "E:\\sotfwear\\MyEclipse8.5_GOV\\ZHWBSB\\.metadata\\.me_tcat\\webapps");
+	   //list.add("RadionboxRenderImpl");
+	  	//fu.getFilePath("E:\\sotfwear\\MyEclipse8.5_GOV\\ZHWBSB\\.metadata\\.me_tcat\\webapps",list);
+	//--	System.out.println(fu.pathList);
 	   //test searchbyCollect
-	   List<String> nameList = new ArrayList<String>();
+	  /* List<String> nameList = new ArrayList<String>();
 	   List<String> dataList = new ArrayList<String>();
 	   nameList.add("file\\ZoomImageScale");
 	   nameList.add("impl\\PreviewUploadFileRenderImpl");
@@ -37,7 +39,7 @@ public class FileUtils {
        dataList.add("wbsbMgr\\WEB-INF\\classes\\com\\eshore\\gov\\zhwb\\wbsb\\file\\ZoomImageScale.class");	   
        dataList.add("ws\\WEB-INF\\classes\\com\\eshore\\gov\\wbsb\\ws\\action\\WbsbFileOperaAction.class");
        System.out.println(fu.searchbyCollect(nameList, dataList));
-       
+       */
 	}
 	
    public FileUtils(){ }
@@ -59,7 +61,8 @@ public class FileUtils {
    }
    
    //获取文件路径
-   public  void getFilePath(String searchPath,List<String> list){   
+   public  void getFilePath(String searchPath,List<String> list){  
+	   proPath = searchPath;
 	   File file =  new File(searchPath);
 	   if(list != null || list.size()>0){
 		   for(int i = 0 ; i<list.size() ; i++){
@@ -86,7 +89,9 @@ public class FileUtils {
  		 String fileName = f.getName();
  		  if(fileName.contains(name)){  //判断文件中是否包含该文件名
  			   //如果有 存入集合中
- 			   setPath(f.getAbsolutePath());
+ 			   // setPath(f.getAbsolutePath());
+ 			  String relativePath = f.getAbsolutePath().replace(proPath+File.separator, "");
+ 			  setPath(relativePath);
  			   System.out.println(f.getAbsolutePath());
  		   }
  		  if(f.isDirectory()){//如果是文件夹 继续查
@@ -196,8 +201,9 @@ public class FileUtils {
 			 fos = new FileOutputStream(file,append);		 
 			 for(int i = 0 ; i < list.size(); i++){
 			   String pathStr = list.get(i);
+			  // pathStr = pathStr.replace(projectPath+File.separator, "");
 			   fos.write(pathStr.getBytes());
-			   fos.write("\r\n\r\n".getBytes());
+			   fos.write("\r\n".getBytes());
 			 }
 			 JOptionPane.showMessageDialog(null, "导出成功"+list.size()+"个文件");
 		 }catch(FileNotFoundException notFound){
