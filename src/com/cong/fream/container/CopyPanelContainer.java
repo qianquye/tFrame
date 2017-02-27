@@ -56,7 +56,7 @@ public class CopyPanelContainer extends BasicContainer{
 	  comboBoxP.setEditable(true);
 	  comboBoxP.setBounds(100, 10, width-250, 30);
 	  //TODO 从xml中查找路径 addItem(Object anObject)  
-	  comboBoxP.addItem("E:\\sotfwear\\MyEclipse8.5_GOV\\ZHWB\\.metadata\\.me_tcat\\webapps");
+	  comboBoxP.addItem("E:\\program\\applicatioon\\workspace\\myEclipse\\zhwbcode");
 	  comboBoxP.addItem("E:\\sotfwear\\MyEclipse8.5_GOV\\ZHWBYY\\.metadata\\.me_tcat\\webapps");
 	  comboBoxP.addItem("E:\\sotfwear\\MyEclipse8.5_GOV\\ZHWBPH\\.metadata\\.me_tcat\\webapps");
 	  comboBoxP.addItem("E:\\sotfwear\\MyEclipse8.5_GOV\\ZHWBSB\\.metadata\\.me_tcat\\webapps");

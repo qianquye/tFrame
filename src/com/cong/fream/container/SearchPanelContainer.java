@@ -63,7 +63,7 @@ public class SearchPanelContainer extends BasicContainer {
 	  comboBox.setEditable(true);
 	  comboBox.setBounds(60, 40, width-170, 30);
 	  //TODO 从xml中查找路径 addItem(Object anObject)  
-	  comboBox.addItem("E:\\sotfwear\\MyEclipse8.5_GOV\\ZHWB\\.metadata\\.me_tcat\\webapps");
+	  comboBox.addItem("E:\\program\\applicatioon\\workspace\\myEclipse\\zhwbcode");
 	  comboBox.addItem("E:\\sotfwear\\MyEclipse8.5_GOV\\ZHWBYY\\.metadata\\.me_tcat\\webapps");
 	  comboBox.addItem("E:\\sotfwear\\MyEclipse8.5_GOV\\ZHWBPH\\.metadata\\.me_tcat\\webapps");
 	  comboBox.addItem("E:\\sotfwear\\MyEclipse8.5_GOV\\ZHWBSB\\.metadata\\.me_tcat\\webapps");

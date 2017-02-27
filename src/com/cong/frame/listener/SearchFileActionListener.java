@@ -60,13 +60,13 @@ public class SearchFileActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent evt){
 		String command = evt.getActionCommand();
 		List<String>  listPath = searchFileFocusListener.listPath;
-		if("ss".equals(command)){//搜索按钮动作操作
+		if("ss".equals(command)){//搜索按钮动作操作 【废弃 20170206】
 			String value  = inputField.getText();
 			String path = (String)comboBox.getSelectedItem();			
-			fu.init(value, path);
 			if(listPath != null){
 				listPath.clear(); 
 			}
+			fu.init(value, path);
 			listPath = fu.getPathList();
 			output.setText("");
 			//调用查询文件接口
@@ -77,7 +77,7 @@ public class SearchFileActionListener implements ActionListener {
 				}
 			}	
 			output.append("\n"+"文件名为:["+value+"]\n查询路径:["+path+"]\n搜索完毕,共搜索到("+listPath.size()+")个文件");
-		}else if("ss2".equals(command)){//从结果集中第二次搜索
+		}else if("ss2".equals(command)){//从结果集中第二次搜索【废弃 20170206】
 			String value2  = inputField.getText();
 			if(value2 == null){
 				JOptionPane.showMessageDialog(null, "请输入搜索名称");

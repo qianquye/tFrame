@@ -2,6 +2,7 @@ package com.cong.frame.listener;
 
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,11 +35,12 @@ public class searchFileFocusListener extends FocusAdapter{
 			JTextField textField = (JTextField)e.getSource();
 			String value = textField.getText();
 			if(Utils.isBank(value)) return;
+			boolean isFile = isFile(value);
 			String path = (String)comboBox.getSelectedItem();			
-			fu.init(value, path);
 			if(listPath != null){
 				listPath.clear(); 
 			}
+			fu.init(value, path,isFile);
 			listPath = fu.getPathList();
 			output.setText("");
 			//调用查询文件接口
@@ -85,4 +87,12 @@ public class searchFileFocusListener extends FocusAdapter{
 		}
 	}
 	
+	private boolean isFile(String path){
+		boolean flag = false;
+		File file = new File(path);
+		if(file.exists() && file.isFile()){
+			flag = true;
+		}
+		return flag;
+	}
 }

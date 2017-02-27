@@ -40,12 +40,17 @@ public class FileUtils {
        dataList.add("ws\\WEB-INF\\classes\\com\\eshore\\gov\\wbsb\\ws\\action\\WbsbFileOperaAction.class");
        System.out.println(fu.searchbyCollect(nameList, dataList));
        */
+	   String name="E:\\program\\applicatioon\\word\\zhwbWordDev\\data\\升版文件\\0204\\test.txt";
+	   String path = "E:\\program\\applicatioon\\workspace\\myEclipse\\zhwbcode\\tyckMgr\\.metadata\\.me_tcat\\webapps";
+	   fu.init(name, path, true);
+	   System.out.println(fu.pathList.toString());
 	}
 	
-   public FileUtils(){ }
+   public FileUtils(){
+	   pathList = new ArrayList<String>();
+   }
    //初始化方法
    public void init(String fileNames,String filePath){
-	   pathList = new ArrayList<String>();
 	   if(isBlank(fileNames))
 		   return;
 	   if(isBlank(filePath))
@@ -60,10 +65,40 @@ public class FileUtils {
 	   this.getFilePath(filePath, list);
    }
    
+   /**
+    * 初始化方法
+    * @param name  文件名文件路径
+    * @param searchPath  搜索路径 
+    * @param isfile  是否是路径
+    */
+   public void init(String name,String searchPath,boolean isfile){
+	   //pathList = new ArrayList<String>();
+	   if(isBlank(name))
+		   return;
+	   if(isBlank(searchPath))
+		   return;
+	   if(!isfile){
+		   init(name,searchPath);
+	   }else{
+		  //通过文本来查找
+		   List<String> firstNameList = new ArrayList<String>();
+		   List<String> secondNameList = new ArrayList<String>();
+		   List<String> folderList = new ArrayList<String>();
+		   readFileList(name,firstNameList,secondNameList,folderList);
+		   getFilePath(searchPath,firstNameList);
+		   searchbyCollect(secondNameList);
+		   pathList.addAll(folderList);
+		}
+	   
+   }
+   
    //获取文件路径
    public  void getFilePath(String searchPath,List<String> list){  
 	   proPath = searchPath;
 	   File file =  new File(searchPath);
+	   if(!file.exists()){
+		   return ;
+	   }
 	   if(list != null || list.size()>0){
 		   for(int i = 0 ; i<list.size() ; i++){
 			   /*1、判断文件名是否有包含的文件
@@ -104,70 +139,106 @@ public class FileUtils {
     
     /**
      * 读取文件清单中的文件
+     * @date 20170204
      * @param filepath
      */
-   public void readFileList(String filepath){
+   private void readFileList(String filepath,List<String> firstNameList,List<String> secondNameList,List<String> folderList){
 	   
-	   if(filepath == null){
+	   
+	   if(filepath == null || firstNameList == null || secondNameList == null || folderList ==  null){
 		   return;
 	   }
 	   File file = new File(filepath);
 	   FileInputStream  fis = null;
 	   BufferedReader br = null;
-	   List<String> firstNameList = new ArrayList<String>();
-	   List<String> secondNameList = new ArrayList<String>();
-	   List<String> folderList = new ArrayList<String>();
+	  
 	   try{
 		   fis = new FileInputStream(file);
 		   br = new BufferedReader(new InputStreamReader(fis));
 		   String line = null;
 		   while((line=br.readLine()) !=null){
-			   line = line.replaceAll(" ", "").replaceAll("/","\\");
-			   File tempfile = new File(line);
-			   if(tempfile.isDirectory()){//判断是不是文件夹
-				   folderList.add(line);
-			   }else{
-				   String firstStr = line.substring(line.lastIndexOf("\\")+1, line.lastIndexOf("."));
-				   String secondStr = line.substring(line.lastIndexOf(line.lastIndexOf("\\"),line.lastIndexOf("\\")-1), line.lastIndexOf("."));
+			   if(isBlank(line)){
+				   continue;
+			   }
+			   line = line.replaceAll(" ", "");
+				line=line.replaceAll("/","\\\\");
+		  
+			  int end = line.lastIndexOf(".");
+			  if(end != -1){
+				//取文件名
+				   String firstStr = line.substring(line.lastIndexOf("\\")+1, end);
+				   //取倒数第二个文件夹名与文件名
+				   int start = line.lastIndexOf("\\",line.lastIndexOf("\\",line.lastIndexOf("\\")-2)-2);
+				   String secondStr = line.substring(start+1,end);
 				   firstNameList.add(firstStr);
 				   secondNameList.add(secondStr);
-			   }
-			   //取文件名
-			    
-			   //取倒数第二个文件夹名与文件名
+			  }else{
+				  //这里要对文件的src或WebRoot进行替换
+				  line = line.replace("src", "WEB-INF\\classes").replace("\\WebRoot", "");
+				  folderList.add(line);
+			  }
 			   
 		   }
+		   
 	   }catch(FileNotFoundException notfound){
 		  notfound.printStackTrace();
 	   }catch(IOException io){
 		   io.printStackTrace();
 	   }
    }
+  
+   
+   /**
+    * 从集合中搜索结果
+    * @param nameList 搜索名集合
+    * @param dataList 数据集合
+    * @return
+    */
+	   public List<String> searchbyCollect(List<String> nameList,List<String> dataList){
+	   	List<String> result = new ArrayList<String>();
+	   	if(nameList == null){
+	   		return null;
+	   	}
+	   	if(dataList == null || dataList.size()<=0){
+	   		return null;
+	   	}
+	   	for(int i =0 ; i<nameList.size(); i++){
+	   		String nameStr = nameList.get(i);
+	   		for(int j = 0 ;j<dataList.size();j++){
+	   			if(dataList.get(j).contains(nameStr)){
+	   				result.add(dataList.get(j));
+	   			}
+	   		}
+	   	}
+	   	return result;
+	   }
    
     /**
      * 从集合中搜索结果
      * @param nameList 搜索名集合
-     * @param dataList 数据集合
      * @return
      */
-    public List<String> searchbyCollect(List<String> nameList,List<String> dataList){
+    private List<String> searchbyCollect(List<String> nameList){
     	List<String> result = new ArrayList<String>();
     	if(nameList == null){
     		return null;
     	}
-    	if(dataList == null || dataList.size()<=0){
+    	if(pathList == null || pathList.size()<=0){
     		return null;
     	}
     	for(int i =0 ; i<nameList.size(); i++){
     		String nameStr = nameList.get(i);
-    		for(int j = 0 ;j<dataList.size();j++){
-    			if(dataList.get(j).contains(nameStr)){
-    				result.add(dataList.get(j));
+    		for(int j = 0 ;j<pathList.size();j++){
+    			if(pathList.get(j).contains(nameStr)){
+    				result.add(pathList.get(j));
     			}
     		}
     	}
-    	return result;
+    	pathList.clear();
+    	pathList = result;
+    	return pathList;
     }
+    
     
 
     
